@@ -6,8 +6,9 @@ function App() {
   const [data,setData] = useState ({})
   const [location, setLocation] = useState('')
 
-  const url ='https://api.openweathermap.org/data/2.5/weather?${location}&appid=9f04a640293beacd623dfc0413d45e18'
-
+  // eslint-disable-next-line no-template-curly-in-string
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=9f04a640293beacd623dfc0413d45e18`
+  
   const searchLocation = (event) => {
     if (event.key === 'Enter') {
       axios.get(url).then((response) => {
@@ -30,34 +31,36 @@ function App() {
       </div>
       <div className="conatiner">
         <div className='top'>
-        <div className='location'>
-          <p>Dallas</p>
-        </div>
-        <div className='temp'>
-          <h1> 65°F </h1>
-        </div>
-        <div className='description'>
-          <p>Cloudy</p>
-        </div>
-        </div>
-        <div className='bottom'>
-          <div className='feels'>
-          <p className='bold'>68°F </p>
-            <p>Feels like</p>
+          <div className='location'>
+            <p>{data.name}</p>
           </div>
-          <div className='humidity'>
-          <p className='bold'>20%</p>
-            <p>Humidity</p>
+          <div className='temp'>
+            {data.main ? <h1>{data.main.temp.toFixed()}°F</h1> : null}
           </div>
-          <div className='wind'>
-          <p className='bold'>12 MPH</p>
-            <p>Winds</p>
-         </div>  
+          <div className='description'>
+            {data.weather ? <p>{data.weather[0].main}</p> : null}
+          </div>
         </div>
+
+  {data.name != undefined &&
+      <div className='bottom'>
+        <div className='feels'>
+          {data.main ? <p className='bold'>{data.main.feels_like.toFixed()}°F</p> : null}
+          <p>Feels like</p>
+        </div>
+        <div className='humidity'>
+          {data.weather ? <p className='bold'>{data.main.humidity}%</p> : null}
+          <p>Humidity</p>
+        </div>
+        <div className='wind'>
+          {data.wind ? <p className='bold'>{data.wind.speed}MPH</p> : null}
+          <p>Winds</p>
+        </div>  
+      </div>
+  }
       </div>
     </div>
   );
 }
 
 export default App;
-//TESTING
